@@ -1,12 +1,21 @@
 const bycrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const redis = require("redis");
-const _ = require('lodash')
+const _ = require("lodash");
 const fs = require("fs");
 const usersModel = require("../models/users_model");
-const { KEY_SECRET } = require("../helpers/env");
+const {
+  KEY_SECRET,
+  REDIS_HOSTNAME,
+  REDIS_PORT,
+  REDIS_PASSWORD,
+} = require("../helpers/env");
 
-const client = redis.createClient();
+const client = redis.createClient({
+  host: REDIS_HOSTNAME,
+  port: REDIS_PORT,
+  password: REDIS_PASSWORD,
+});
 const redisAction = require("../helpers/redis");
 
 const { success, sucLog, failed, errLogin } = require("../helpers/response");
@@ -53,17 +62,19 @@ const users = {
               failed(res, 404, error);
             });
         } else {
-          const dataRedis = JSON.parse(resultRedis)
-          const dataFilter = _.filter(dataRedis, (e) => e.id != id ? e : undefined)
-          const pagination = _.slice(dataFilter, offset, offset+limit)
+          const dataRedis = JSON.parse(resultRedis);
+          const dataFilter = _.filter(dataRedis, (e) =>
+            e.id != id ? e : undefined
+          );
+          const pagination = _.slice(dataFilter, offset, offset + limit);
           const output = {
             data: pagination,
             totalPage: Math.ceil(dataFilter.length / limit),
             search,
             limit,
-            page: req.query.page
-          }
-          success(res, output, 200, "Get All Users Success")
+            page: req.query.page,
+          };
+          success(res, output, 200, "Get All Users Success");
         }
       });
     } catch (error) {
@@ -75,19 +86,22 @@ const users = {
       const { id } = req.params;
       client.get("users", (err, resultRedis) => {
         if (!resultRedis) {
-          usersModel.getDetails(id).then((result) => {
-            success(res, result, 200, "Get Details User Success");
-          })
-          .catch((err) => {
-            failed(res, 404, err)
-          })
+          usersModel
+            .getDetails(id)
+            .then((result) => {
+              success(res, result, 200, "Get Details User Success");
+            })
+            .catch((err) => {
+              failed(res, 404, err);
+            });
         } else {
-          const dataRedis = JSON.parse(resultRedis)
-          const dataFilter = _.filter(dataRedis, (e) => e.id == id ? e : undefined)
-          success(res, dataFilter, 200, "Get details user Succes")
+          const dataRedis = JSON.parse(resultRedis);
+          const dataFilter = _.filter(dataRedis, (e) =>
+            e.id == id ? e : undefined
+          );
+          success(res, dataFilter, 200, "Get details user Succes");
         }
-      })
-      
+      });
     } catch (error) {
       failed(res, 404, error);
     }
@@ -96,7 +110,7 @@ const users = {
     try {
       const { body } = req;
       const hash = bycrypt.hashSync(body.password, 10);
-        // const image = req.file.filename
+
       usersModel.getDetailsWithEmail(body.email).then((result) => {
         if (result.length === 0) {
           usersModel
@@ -151,33 +165,46 @@ const users = {
     try {
       const { id } = req.params;
       const { body } = req;
-      const hash = bycrypt.hashSync(body.password, 10);
-      const image = req.file.filename;
-      usersModel
-        .getDetails(id)
-        .then((result) => {
-          const data = result[0];
-          const nameImage = data.image;
-          if (nameImage !== "default.jpg") {
-            fs.unlink(`./uploads/${nameImage}`, (err) => {
-              if (err) {
-                errLogin(res, err);
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          failed(res, 502, error);
-        });
-      usersModel
-        .update(id, body, hash, image)
-        .then((result) => {
-          client.del("users");
-          success(res, result, 200, "Update Success");
-        })
-        .catch((error) => {
-          failed(res, 400, error);
-        });
+
+      if (req.file === undefined) {
+        usersModel
+          .update(id, body, body.image)
+          .then((result) => {
+            client.del("users");
+            success(res, result, 200, "Update Success");
+          })
+          .catch((error) => {
+            failed(res, 400, error);
+          });
+      } else {
+        const img = req.file.filename;
+        usersModel
+          .getDetails(id)
+          .then((result) => {
+            const data = result[0];
+            const nameImage = data.image;
+            if (nameImage !== "default.jpg") {
+              fs.unlink(`./uploads/${nameImage}`, (err) => {
+                if (err) {
+                  errLogin(res, err);
+                }
+              });
+            }
+          })
+          .catch((error) => {
+            failed(res, 502, error);
+          });
+
+        usersModel
+          .update(id, body, img)
+          .then((result) => {
+            client.del("users");
+            success(res, result, 200, "Update Success");
+          })
+          .catch((error) => {
+            failed(res, 400, error);
+          });
+      }
     } catch (error) {
       failed(res, 400, error);
     }

@@ -1,18 +1,20 @@
-const redis = require('redis')
+const redis = require("redis");
+const { REDIS_HOSTNAME, REDIS_PORT, REDIS_PASSWORD } = require("./env");
 
 const client = redis.createClient({
-    host: '127.0.0.1',
-    port: 6379,
-})
+  host: REDIS_HOSTNAME,
+  port: REDIS_PORT,
+  password: REDIS_PASSWORD,
+});
 
-client.on('error', (err) => {
-    console.log(err)
-})
+client.on("error", (err) => {
+  console.log(err);
+});
 
 const redisAction = {
-    set: (key, value) => {
-        client.set(key, value)
-    }
-}
+  set: (key, value) => {
+    client.set(key, value);
+  },
+};
 
-module.exports = redisAction
+module.exports = redisAction;
