@@ -13,13 +13,9 @@ app.use(usersRouter);
 app.use(express.static(__dirname + "/uploads"));
 
 const { PORT = 3004 || process.env.PORT } = process.env;
-app.listen(PORT, () => {
-  console.log(`Service running on port ${PORT}`);
-});
 
-const server = app.listen(PORT);
+const httpServer = http.createServer(app);
 
-const httpServer = http.createServer(server);
 const io = new Server(httpServer, {
   cors: {
     origin: "*",
@@ -27,5 +23,9 @@ const io = new Server(httpServer, {
 });
 
 require("./src/socket/consumer")(io);
+
+httpServer.listen(PORT, () => {
+  console.log(`Service running on port ${PORT}`);
+});
 
 module.exports = app;
