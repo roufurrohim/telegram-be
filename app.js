@@ -17,7 +17,9 @@ app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
 });
 
-const httpServer = http.createServer(app);
+const server = app.listen(PORT);
+
+const httpServer = http.createServer(server);
 const io = new Server(httpServer, {
   cors: {
     origin: "*",
