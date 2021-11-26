@@ -22,7 +22,7 @@ const messages = {
         WHERE
         (sender='${sender}' AND receiver='${receiver}')
         OR
-        (sender='${receiver}' AND receiver='${sender}')`,
+        (sender='${receiver}' AND receiver='${sender}') ORDER BY id ASC`,
         (err, result) => {
           if (err) {
             reject(err);
