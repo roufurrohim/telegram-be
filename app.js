@@ -21,6 +21,7 @@ app.listen(PORT, LOCAL_ADDRESS, () => {
 module.exports = app;
 
 const server = app.listen(PORT);
+server.use(cors());
 const httpServer = http.createServer(server);
 const io = new Server(httpServer, {
   cors: {
