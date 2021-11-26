@@ -20,7 +20,8 @@ app.listen(PORT, LOCAL_ADDRESS, () => {
 
 module.exports = app;
 
-const httpServer = http.createServer(app);
+const server = app.listen(PORT);
+const httpServer = http.createServer(server);
 const io = new Server(httpServer, {
   cors: {
     origin: "*",
