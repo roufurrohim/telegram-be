@@ -12,17 +12,12 @@ app.use(bodyParser.json());
 app.use(usersRouter);
 app.use(express.static(__dirname + "/uploads"));
 
-const { PORT = 3004 || process.env.PORT, LOCAL_ADDRESS = "0.0.0.0" } =
-  process.env;
-app.listen(PORT, LOCAL_ADDRESS, () => {
+const { PORT = 3004 || process.env.PORT } = process.env;
+app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
 });
 
-module.exports = app;
-
-const server = app.listen(PORT);
-server.use(cors());
-const httpServer = http.createServer(server);
+const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: "*",
@@ -30,3 +25,5 @@ const io = new Server(httpServer, {
 });
 
 require("./src/socket/consumer")(io);
+
+module.exports = app;
