@@ -29,7 +29,7 @@ npm install
 
 **Standard API**
 
-[click me](https://github.com/roufurrohim/tester/blob/master/Coffee-shop.postman_collection.json)
+[click me](https://github.com/roufurrohim/telegram-be/blob/master/telegram.postman_collection.json)
 
 
 **.env example**
