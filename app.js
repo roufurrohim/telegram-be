@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-
 const usersRouter = require("./src/routers/users");
 
 const app = express();

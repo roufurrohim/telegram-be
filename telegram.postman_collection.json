@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "ad47c9db-196d-4b16-9742-bf95e1629898",
+		"name": "telegram",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mom\",\n    \"email\": \"mom@mail.com\",\n    \"password\": \"123\",\n    \"image\": \"default.jpg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"brother@mail.com\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"brother@mail.com\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/users/43",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"users",
+						"43"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMsImVtYWlsIjoidGVzdGVyQG1haWwiLCJpYXQiOjE2MzMxNDE5Nzh9.Ve78oqneftea3yL0NaNGVFUv3q0sU3RqIdQo-qPgyKc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "tesUpdate",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "tesUpdate@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/mbr/Downloads/tes.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/user/45",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"45"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMsImVtYWlsIjoidGVzdGVyQG1haWwiLCJpYXQiOjE2MzMxNDE5Nzh9.Ve78oqneftea3yL0NaNGVFUv3q0sU3RqIdQo-qPgyKc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/user/45",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"45"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get details user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDMsImVtYWlsIjoiYnJvdGhlckBtYWlsLmNvbSIsImlhdCI6MTYzMzE4NTA3NX0.wCruAYJh-UANA5hm5Te51hGwT1Px9JRVAtujFq9Axw8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/user/45",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"45"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
